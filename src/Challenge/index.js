@@ -19,6 +19,12 @@ const Button = styled.button`
 	border: none;
 `;
 
+const Preview = styled.img`
+	width: 100vw;
+	height: 200px;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 45%, #000000);
+`;
+
 const Challenge = () => {
 	const [log, setLog] = useState(null);
 
@@ -58,6 +64,7 @@ const Challenge = () => {
 
 	return (
 		<Wrap>
+			<Preview />
 			<Button onClick={handleShare}>Share to Instagram.Stories</Button>
 			<p>{log}</p>
 		</Wrap>

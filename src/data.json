@@ -1,16 +1,22 @@
-{
-	"london": {
+[
+	{
 		"name": "Лондон",
+		"lat": 51.505,
+		"lng": -0.09,
+		"zoom": 13,
 		"challenges": {
 			"0": {
-				"name": "Эйфелева башня"
+				"name": "Эйфелева башня",
+				"image": "img.png",
+				"description": "text",
+				"lat": 51.505,
+				"lng": -0.09,
+				"bonus": 1300
 			}
 		}
 	},
-	"paris": {
+	{
 		"name": "Париж",
-		"challenges": {
-			"0": {}
-		}
+		"challenges": {}
 	}
-}
+]
