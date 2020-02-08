@@ -24,8 +24,10 @@
 		"cordova-plugin-camera": "^1.2.0",
 		"cordova-plugin-instagram-stories": "git+https://github.com/gregavola/cordova-plugin-instagram-stories.git",
 		"history": "^4.10.1",
+		"leaflet": "^1.6.0",
 		"react": "^16.12.0",
 		"react-dom": "^16.12.0",
+		"react-leaflet": "^2.6.1",
 		"react-router-dom": "^5.1.2",
 		"styled-components": "^5.0.1"
 	},

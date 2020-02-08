@@ -1,27 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Header, HeaderTitle } from "../ui/header";
 
 import data from "../data.json";
-
-const Header = styled.header`
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  background-color: #00b956;
-`;
-
-const HeaderTitle = styled.h1`
-  font-size: 28px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 0.93;
-  letter-spacing: -0.19px;
-  text-align: center;
-  color: #ffffff;
-`;
 
 const Profile = styled.section`
   padding: 0 20px;
@@ -80,6 +62,7 @@ const TravelCardTitle = styled.h1`
   letter-spacing: -0.17px;
   color: #00b956;
   margin: 0;
+  margin-top: 6px;
   margin-bottom: 10px;
 `;
 
@@ -92,19 +75,38 @@ const TravelCardBonus = styled.p`
   letter-spacing: -0.1px;
   color: #474747;
   margin: 0;
+  margin-top: 10px;
   margin-bottom: 5px;
 `;
 
 const ChellengesList = styled.div`
-  width: 100%;
+  width: calc(100% + 30px);
+  margin-left: -15px;
   display: flex;
+  overflow-x: auto;
 `;
 
 const ChellengeIcon = styled.img`
   width: 84px;
   height: 84px;
-  margin-right: 20px;
+  margin: 0 5px;
   display: block;
+`;
+
+const ProgressLine = styled.div`
+  height: 3.5px;
+  border-radius: 1.8px;
+  background-color: #e4e4e4;
+  width: 100%;
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    background-color: #00b956;
+    height: 3.5px;
+    transition: 0.5s all;
+    width: ${({ progress }) => `calc(100% * ${progress / 100})`};
+  }
 `;
 
 const Home = () => {
@@ -122,15 +124,19 @@ const Home = () => {
           <TravelCard key={id}>
             <ChellengesList>
               {challenges.map(({ icon }, challenge) => (
-                <Link to={`/challenge/${id}/${challenge}`}>
+                <Link
+                  key={challenge}
+                  to={`/challenge?trip=${id}&challenge=${challenge}`}
+                >
                   <ChellengeIcon src={icon} />
                 </Link>
               ))}
             </ChellengesList>
-            <Link to={`/trip/${id}`}>
+            <Link to={`/trip?id=${id}`}>
               <TravelCardTitle>{name}</TravelCardTitle>
             </Link>
-            <TravelCardBonus>0 ₽ / 1500 ₽</TravelCardBonus>
+            <ProgressLine progress={30} />
+            <TravelCardBonus>685 ₽ / 1000 ₽</TravelCardBonus>
           </TravelCard>
         ))}
       </TravelList>
