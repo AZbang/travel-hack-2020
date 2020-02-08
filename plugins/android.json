@@ -18,7 +18,15 @@
     },
     "cordova-plugin-camera": {
       "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    },
+    "cordova-plugin-advanced-http": {
+      "OKHTTP_VERSION": "3.10.0",
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    }
+  }
 }

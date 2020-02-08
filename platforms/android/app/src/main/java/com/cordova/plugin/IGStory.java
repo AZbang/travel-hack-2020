@@ -51,12 +51,12 @@ public class IGStory extends CordovaPlugin {
           String backgroundBottomColor = args.getString(4);
 
           // Define image asset URI and attribution link URL
-          // File parentDir = this.webView.getContext().getExternalFilesDir(null);
-          // File backgroundImageFile = File.createTempFile("instagramBackground", ".png", parentDir);
-          // URL backgroundURL = new URL(backgroundImageUrl);
-          // saveImage(backgroundURL, backgroundImageFile);
-          // Uri backgroundAssetUri = FileProvider.getUriForFile(this.cordova.getActivity().getBaseContext(), this.cordova.getActivity().getBaseContext().getPackageName() + ".provider" ,backgroundImageFile);
-          Uri backgroundAssetUri = Uri.parse(backgroundImageUrl);
+          File parentDir = this.webView.getContext().getExternalFilesDir(null);
+          File backgroundImageFile = File.createTempFile("instagramBackground", ".png", parentDir);
+          URL backgroundURL = new URL(backgroundImageUrl);
+          saveImage(backgroundURL, backgroundImageFile);
+          Uri backgroundAssetUri = FileProvider.getUriForFile(this.cordova.getActivity().getBaseContext(), this.cordova.getActivity().getBaseContext().getPackageName() + ".provider" ,backgroundImageFile);
+          //Uri backgroundAssetUri = Uri.parse(backgroundImageUrl);
           
           // Instantiate implicit intent with ADD_TO_STORY action,
           // background asset, and attribution link

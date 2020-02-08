@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Header = styled.header`
   position: ${({ fixed }) => fixed && "fixed"};
+  z-index: 1000;
+  height: 70px;
   width: 100vw;
   display: flex;
   justify-content: center;

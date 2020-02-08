@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { withRouter } from "react-router-dom";
+
 import data from "../data.json";
 import useQuery from "../useQuery";
 
@@ -14,10 +16,10 @@ const Wrap = styled.div`
 
 const rotation = keyframes`
 	0% {
-		transform: rotate(0deg);
+		transform: rotate(360deg);
 	}
 	100% {
-		transform: rotate(360deg);
+		transform: rotate(0deg);
 	}
 `;
 
@@ -153,50 +155,86 @@ const PhotoAreaIcon = styled.p`
   color: #c5c5c5;
 `;
 
-const Challenge = () => {
+const ErrorLog = styled.p`
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.23px;
+  text-align: center;
+  color: #c11a1a;
+`;
+
+const Challenge = ({ history }) => {
   const { trip, challenge: id } = useQuery();
   const challenge = data[trip].challenges[id];
 
   const [status, setStatus] = useState(false);
+  const [shareImage, setShareImage] = useState(null);
   const [verify, setVerify] = useState(false);
   const [image, setImage] = useState(null);
+  const [log, setLog] = useState(null);
 
-  const uploadImage = () => {
+  const uploadImage = async () => {
     if (status) return;
-    const file = document.querySelector("#challengeImage > input[type='file']");
-    const submit = document.querySelector(
-      "#challengeImage > input[type='submit']"
-    );
-    const onChange = e => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      if (file.files[0]) {
-        reader.readAsDataURL(file.files[0]);
-        submit.click();
-        setStatus(true);
-      }
-    };
-    file.click();
-    file.addEventListener("change", onChange, { once: true });
+
+    try {
+      const data = await getImage();
+      setImage("data:image/jpeg;base64," + data);
+      setVerify(false);
+
+      await verifyImage(data);
+    } catch {
+      setLog(null);
+    }
+
+    // const file = document.querySelector("#challengeImage > input[type='file']");
+    // const submit = document.querySelector(
+    //   "#challengeImage > input[type='submit']"
+    // );
+    // const onChange = e => {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     setImage(reader.result);
+    //   };
+    //   if (file.files[0]) {
+    //     setVerify(false);
+    //     reader.readAsDataURL(file.files[0]);
+    //     submit.click();
+    //   }
+    // };
+    // file.click();
+    // file.addEventListener("change", onChange);
   };
 
-  const verifyImage = async e => {
-    e.preventDefault();
+  const verifyImage = async base64 => {
     if (status) return false;
 
-    const response = await fetch("http://85.143.218.224/process_photo", {
-      method: "POST",
-      body: new FormData(e.target)
-    });
+    try {
+      setStatus(true);
+      //const formData = new FormData(document.querySelector("#challengeImage"));
+      //setLog("create formData");
+      const formData = { b64photo: base64, trip: data[trip].name };
+      const response = await fetch("http://85.143.218.224/process_photo", {
+        method: "POST",
+        body: JSON.stringify(formData)
+      });
+      //setLog(null);
 
-    const body = JSON.parse(await response.text());
-    const isVerify =
-      body.is_selfie &&
-      body.landmarks.some(v => v.toLowerCase() === challenge.trigger);
+      const body = JSON.parse(await response.text());
+      const isVerify =
+        body.is_selfie &&
+        body.landmarks.some(v => v.toLowerCase() === challenge.trigger);
+      setVerify(isVerify);
+      if (isVerify) setShareImage("http://85.143.218.224/img/" + body.filename);
+      else setLog(body.landmarks.join(", ") + " " + challenge.trigger);
+    } catch (e) {
+      console.log(e);
+      setLog(e.toString());
+    }
+
     setStatus(false);
-    setVerify(isVerify);
     return false;
   };
 
@@ -205,9 +243,10 @@ const Challenge = () => {
       if (!navigator.camera) return reject();
       navigator.camera.getPicture(resolve, reject, {
         quality: 50,
-        sourceType: window.Camera.PictureSourceType.PHOTOLIBRARY,
+        sourceType: window.Camera.PictureSourceType.CAMERA,
+        cameraDirection: window.Camera.Direction.FRONT,
         allowEdit: true,
-        destinationType: window.Camera.DestinationType.FILE_URI
+        destinationType: window.Camera.DestinationType.DATA_URL
       });
     });
   };
@@ -219,51 +258,63 @@ const Challenge = () => {
         backgroundImage,
         attributionURL: "https://www.my-aweseome-app.com/p/BhzbIOUBval/"
       };
-
       window.IGStory.shareToStory(params, resolve, reject);
     });
   };
 
   const handleShare = async () => {
-    // try {
-    // 	const image = await getImage();
-    // 	await shareStory(image);
-    // 	setLog("Done");
-    // } catch (e) {
-    // 	setLog("Failure");
-    // }
+    if (!verify || !shareImage) return;
+    try {
+      setStatus(true);
+      await shareStory(shareImage);
+      history.push(`/trip?id=${trip}&complete=${id}`);
+    } catch (e) {
+      setLog("Ошибка, невозможно опубликовать сторис!");
+    }
+    setStatus(false);
   };
 
   return (
     <section>
       <Preview image={challenge.image}>
         <PreviewLabel>{challenge.name}</PreviewLabel>
-        <PreviewBonus>{challenge.bonus}</PreviewBonus>
+        <PreviewBonus>{challenge.bonus} ₽</PreviewBonus>
       </Preview>
 
       <Content>
         <Description>{challenge.description}</Description>
         <Tutor>Сделайте селфи на его фоне!</Tutor>
         <PhotoArea image={image} onClick={uploadImage}>
-          <form onSubmit={verifyImage} id="challengeImage" hidden>
-            <input name="photo" type="file" />
+          {/* <form onSubmit={verifyImage} id="challengeImage" hidden>
+            <input name="photo" accept="image/*" capture="camera" type="file" />
             <input type="submit" />
-          </form>
+          </form> */}
 
           {!image && (
             <>
               <PhotoAreaIcon>+</PhotoAreaIcon>
-              <PhotoAreaText>ПРИКРЕПИТЬ ФОТО</PhotoAreaText>
+              <PhotoAreaText>СДЕЛАТЬ ФОТО</PhotoAreaText>
             </>
           )}
         </PhotoArea>
+
+        <ErrorLog>{log}</ErrorLog>
+
         <Button isLoading={status} isDisable={!verify} onClick={handleShare}>
-          {status ? <Spinner src="./Spinner.png" /> : <img src="./insta.svg" />}
-          {status ? "Проверяем..." : "Поделиться в Instagram"}
+          {status ? (
+            <img width={36} height={36} src="Spinner.gif" />
+          ) : (
+            <img src="insta.svg" />
+          )}
+          {status && verify
+            ? "Публикуем в сторисы..."
+            : status
+            ? "Проверяем..."
+            : "Поделиться в Instagram"}
         </Button>
       </Content>
     </section>
   );
 };
 
-export default Challenge;
+export default withRouter(Challenge);
