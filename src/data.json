@@ -4,19 +4,21 @@
 		"lat": 51.505,
 		"lng": -0.09,
 		"zoom": 13,
-		"challenges": {
-			"0": {
+		"challenges": [
+			{
 				"name": "Эйфелева башня",
-				"image": "img.png",
-				"description": "text",
+				"image": "./bigben.jpeg",
+				"trigger": "big ben",
+				"icon": "./ico_bigban.png",
+				"description": "Биг-Бен - это башня с часами-курантами, расположенная в северо-восточной части здания Парламента в Вестминстере.",
 				"lat": 51.505,
 				"lng": -0.09,
 				"bonus": 1300
 			}
-		}
+		]
 	},
 	{
 		"name": "Париж",
-		"challenges": {}
+		"challenges": []
 	}
 ]

@@ -79,6 +79,8 @@ const TravelCardTitle = styled.h1`
   line-height: normal;
   letter-spacing: -0.17px;
   color: #00b956;
+  margin: 0;
+  margin-bottom: 10px;
 `;
 
 const TravelCardBonus = styled.p`
@@ -89,6 +91,20 @@ const TravelCardBonus = styled.p`
   line-height: normal;
   letter-spacing: -0.1px;
   color: #474747;
+  margin: 0;
+  margin-bottom: 5px;
+`;
+
+const ChellengesList = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const ChellengeIcon = styled.img`
+  width: 84px;
+  height: 84px;
+  margin-right: 20px;
+  display: block;
 `;
 
 const Home = () => {
@@ -102,9 +118,16 @@ const Home = () => {
         <Balance>Заработано: 145345 руб</Balance>
       </Profile>
       <TravelList>
-        {data.map(({ name }, id) => (
+        {data.map(({ name, challenges }, id) => (
           <TravelCard key={id}>
-            <Link to={`/challenge?id=${id}`}>
+            <ChellengesList>
+              {challenges.map(({ icon }, challenge) => (
+                <Link to={`/challenge/${id}/${challenge}`}>
+                  <ChellengeIcon src={icon} />
+                </Link>
+              ))}
+            </ChellengesList>
+            <Link to={`/trip/${id}`}>
               <TravelCardTitle>{name}</TravelCardTitle>
             </Link>
             <TravelCardBonus>0 ₽ / 1500 ₽</TravelCardBonus>

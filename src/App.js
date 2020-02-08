@@ -15,7 +15,7 @@ const App = () => {
 		<Router>
 			<div>
 				<Switch>
-					<Route path="/challenge">
+					<Route path="/challenge/:trip/:challenge">
 						<Challenge />
 					</Route>
 					<Route path="/">
