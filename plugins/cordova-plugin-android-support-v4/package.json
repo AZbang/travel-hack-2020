@@ -1,0 +1,62 @@
+{
+  "_from": "cordova-plugin-android-support-v4",
+  "_id": "cordova-plugin-android-support-v4@21.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-j0BSlENfQRXXPx7o36UDLWCcuIk=",
+  "_location": "/cordova-plugin-android-support-v4",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-android-support-v4",
+    "name": "cordova-plugin-android-support-v4",
+    "escapedName": "cordova-plugin-android-support-v4",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-android-support-v4/-/cordova-plugin-android-support-v4-21.0.1.tgz",
+  "_shasum": "8f405294435f4115d73f1ee8dfa5032d609cb889",
+  "_spec": "cordova-plugin-android-support-v4",
+  "_where": "/home/azbang/megatravel",
+  "author": {
+    "name": "Google"
+  },
+  "bugs": {
+    "url": "https://github.com/floatinghotpot/cordova-plugin-android-support-v4/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Google Inc."
+    }
+  ],
+  "cordova": {
+    "id": "cordova-plugin-android-support-v4",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova plugin to add android-support-v4.jar to Cordova/PhoneGap project",
+  "homepage": "https://github.com/floatinghotpot/cordova-plugin-android-support-v4#readme",
+  "keywords": [
+    "cordova",
+    "ecosystem:cordova",
+    "google",
+    "android",
+    "support",
+    "v4"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-android-support-v4",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/floatinghotpot/cordova-plugin-android-support-v4.git"
+  },
+  "version": "21.0.1"
+}

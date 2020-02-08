@@ -1,0 +1,31 @@
+{
+  "_from": "git+https://github.com/gregavola/cordova-plugin-instagram-stories.git",
+  "_id": "cordova-plugin-instagram-stories@1.0.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-instagram-stories",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/gregavola/cordova-plugin-instagram-stories",
+    "rawSpec": "https://github.com/gregavola/cordova-plugin-instagram-stories",
+    "saveSpec": "git+https://github.com/gregavola/cordova-plugin-instagram-stories.git",
+    "fetchSpec": "https://github.com/gregavola/cordova-plugin-instagram-stories.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/gregavola/cordova-plugin-instagram-stories.git#988d544396a34595073e1a0edb2ded00607664d4",
+  "_spec": "https://github.com/gregavola/cordova-plugin-instagram-stories",
+  "_where": "/home/azbang/megatravel",
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-instagram-stories"
+  },
+  "deprecated": false,
+  "description": "A starting point for a Cordova Plugin",
+  "name": "cordova-plugin-instagram-stories",
+  "version": "1.0.0"
+}

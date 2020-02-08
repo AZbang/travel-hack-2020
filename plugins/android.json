@@ -1,0 +1,24 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-android-support-v4": {
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    },
+    "cordova-plugin-instagram-stories": {
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.azbang.hackathon.megatravel"
+    }
+  },
+  "dependent_plugins": {}
+}

@@ -1,0 +1,55 @@
+{
+	"name": "com.azbang.hackathon.megatravel",
+	"displayName": "megatravel",
+	"homepage": "./",
+	"version": "1.0.0",
+	"description": "Hackathon application special for Megaphone.Travel",
+	"main": "index.js",
+	"scripts": {
+		"start": "PORT=10888 && react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test --env=jsdom",
+		"cordova:build": "npm run build && rm -rf www && mv build www && rm -rf build",
+		"cordova:android": "npm run cordova:build && cordova build android --release --buildConfig",
+		"deploy": "npm run build && gh-pages -d build"
+	},
+	"keywords": [
+		"ecosystem:cordova"
+	],
+	"author": "azbang",
+	"license": "Apache-2.0",
+	"dependencies": {
+		"cordova-android": "^8.1.0",
+		"cordova-plugin-android-support-v4": "^21.0.1",
+		"cordova-plugin-camera": "^1.2.0",
+		"cordova-plugin-instagram-stories": "git+https://github.com/gregavola/cordova-plugin-instagram-stories.git",
+		"history": "^4.10.1",
+		"react": "^16.12.0",
+		"react-dom": "^16.12.0",
+		"react-router-dom": "^5.1.2",
+		"styled-components": "^5.0.1"
+	},
+	"devDependencies": {
+		"cordova-plugin-whitelist": "^1.3.4",
+		"cross-env": "^5.2.0",
+		"gh-pages": "^2.0.1",
+		"react-hot-loader": "^4.3.12",
+		"react-scripts": "2.0.3"
+	},
+	"cordova": {
+		"plugins": {
+			"cordova-plugin-whitelist": {},
+			"cordova-plugin-android-support-v4": {},
+			"cordova-plugin-camera": {}
+		},
+		"platforms": [
+			"android"
+		]
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	]
+}

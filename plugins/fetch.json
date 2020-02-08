@@ -1,0 +1,34 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-instagram-stories": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/gregavola/cordova-plugin-instagram-stories"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-android-support-v4": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-android-support-v4@^21.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-camera@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}
