@@ -1,6 +1,6 @@
 export default function useQuery() {
-  const hashes = window.location.search
-    .slice(window.location.search.indexOf("?") + 1)
+  const hashes = window.location.hash
+    .slice(window.location.hash.indexOf("?") + 1)
     .split("&");
   const params = {};
   hashes.map(hash => {

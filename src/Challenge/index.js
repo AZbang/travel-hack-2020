@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import data from "../data.json";
 import useQuery from "../useQuery";
+import { completeChallenge, getSaved } from "../profile";
 
 const Wrap = styled.div`
   width: 100vw;
@@ -119,7 +120,7 @@ const Tutor = styled(Description)`
 `;
 
 const PhotoArea = styled.div`
-  height: 250px;
+  height: 350px;
   border-radius: 5px;
   border: ${({ image }) => !image && "dashed 3px #c5c5c5"};
   background-position: center;
@@ -169,11 +170,12 @@ const ErrorLog = styled.p`
 const Challenge = ({ history }) => {
   const { trip, challenge: id } = useQuery();
   const challenge = data[trip].challenges[id];
+  const isCompleted = !!getSaved(trip, id);
 
   const [status, setStatus] = useState(false);
   const [shareImage, setShareImage] = useState(null);
   const [verify, setVerify] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(getSaved(trip, id));
   const [log, setLog] = useState(null);
 
   const uploadImage = async () => {
@@ -228,7 +230,7 @@ const Challenge = ({ history }) => {
         body.landmarks.some(v => v.toLowerCase() === challenge.trigger);
       setVerify(isVerify);
       if (isVerify) setShareImage("http://85.143.218.224/img/" + body.filename);
-      else setLog(body.landmarks.join(", ") + " " + challenge.trigger);
+      else setLog("К сожалению Ваше фото не подходит для этого челенджа.");
     } catch (e) {
       console.log(e);
       setLog(e.toString());
@@ -243,20 +245,20 @@ const Challenge = ({ history }) => {
       if (!navigator.camera) return reject();
       navigator.camera.getPicture(resolve, reject, {
         quality: 50,
-        sourceType: window.Camera.PictureSourceType.CAMERA,
-        cameraDirection: window.Camera.Direction.FRONT,
         allowEdit: true,
+        sourceType: window.Camera.PictureSourceType.PHOTOLIBRARY,
+        //cameraDirection: window.Camera.Direction.FRONT,
         destinationType: window.Camera.DestinationType.DATA_URL
       });
     });
   };
 
-  const shareStory = backgroundImage => {
+  const shareStory = image => {
     return new Promise((resolve, reject) => {
       if (!window.IGStory) return reject();
       const params = {
-        backgroundImage,
-        attributionURL: "https://www.my-aweseome-app.com/p/BhzbIOUBval/"
+        backgroundImage: "https://i.ibb.co/vPsxXqh/Story.png",
+        stickerImage: image
       };
       window.IGStory.shareToStory(params, resolve, reject);
     });
@@ -267,7 +269,8 @@ const Challenge = ({ history }) => {
     try {
       setStatus(true);
       await shareStory(shareImage);
-      history.push(`/trip?id=${trip}&complete=${id}`);
+      completeChallenge(trip, id, shareImage, challenge.bonus);
+      history.goBack();
     } catch (e) {
       setLog("Ошибка, невозможно опубликовать сторис!");
     }
@@ -283,7 +286,7 @@ const Challenge = ({ history }) => {
 
       <Content>
         <Description>{challenge.description}</Description>
-        <Tutor>Сделайте селфи на его фоне!</Tutor>
+        <Tutor>Сделайте селфи на его фоне и опубликуйте в истории!</Tutor>
         <PhotoArea image={image} onClick={uploadImage}>
           {/* <form onSubmit={verifyImage} id="challengeImage" hidden>
             <input name="photo" accept="image/*" capture="camera" type="file" />

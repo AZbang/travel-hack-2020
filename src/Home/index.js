@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+
 import { Header, HeaderTitle } from "../ui/header";
 
 import data from "../data.json";
+import {
+  profile,
+  getSaved,
+  getProgress,
+  totalBonus,
+  currentBonus
+} from "../profile";
 
 const Profile = styled.section`
   padding: 0 20px;
@@ -86,11 +95,31 @@ const ChellengesList = styled.div`
   overflow-x: auto;
 `;
 
-const ChellengeIcon = styled.img`
+const ChellengeIcon = styled.div`
   width: 84px;
   height: 84px;
   margin: 0 5px;
-  display: block;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  ${({ complete }) =>
+    complete &&
+    css`
+      &:before {
+        content: "";
+        position: absolute;
+        left: 100%;
+        width: 20px;
+        height: 20px;
+        margin: 4px -30px;
+        background-color: #731a82;
+        border-radius: 50%;
+      }
+    `}
 `;
 
 const ProgressLine = styled.div`
@@ -109,34 +138,42 @@ const ProgressLine = styled.div`
   }
 `;
 
-const Home = () => {
+const Home = ({ history }) => {
   return (
     <section>
       <Header>
         <HeaderTitle>Кешбэк</HeaderTitle>
       </Header>
       <Profile>
-        <UserName>Марина</UserName>
-        <Balance>Заработано: 145345 руб</Balance>
+        <UserName>{profile.name}</UserName>
+        <Balance>Заработано: {profile.balance} ₽</Balance>
       </Profile>
       <TravelList>
         {data.map(({ name, challenges }, id) => (
           <TravelCard key={id}>
             <ChellengesList>
               {challenges.map(({ icon }, challenge) => (
-                <Link
+                <ChellengeIcon
                   key={challenge}
-                  to={`/challenge?trip=${id}&challenge=${challenge}`}
+                  complete={!!getSaved(id, challenge)}
+                  onClick={() => {
+                    history.push(`/trip?id=${id}`);
+                    history.push(
+                      `/challenge?trip=${id}&challenge=${challenge}`
+                    );
+                  }}
                 >
-                  <ChellengeIcon src={icon} />
-                </Link>
+                  <img src={icon} />
+                </ChellengeIcon>
               ))}
             </ChellengesList>
             <Link to={`/trip?id=${id}`}>
               <TravelCardTitle>{name}</TravelCardTitle>
+              <ProgressLine progress={getProgress(id)} />
+              <TravelCardBonus>
+                {currentBonus(id)} ₽ / {totalBonus(id)} ₽
+              </TravelCardBonus>
             </Link>
-            <ProgressLine progress={30} />
-            <TravelCardBonus>685 ₽ / 1000 ₽</TravelCardBonus>
           </TravelCard>
         ))}
       </TravelList>
@@ -144,4 +181,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withRouter(Home);

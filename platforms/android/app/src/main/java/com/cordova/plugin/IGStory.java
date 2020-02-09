@@ -56,17 +56,22 @@ public class IGStory extends CordovaPlugin {
           URL backgroundURL = new URL(backgroundImageUrl);
           saveImage(backgroundURL, backgroundImageFile);
           Uri backgroundAssetUri = FileProvider.getUriForFile(this.cordova.getActivity().getBaseContext(), this.cordova.getActivity().getBaseContext().getPackageName() + ".provider" ,backgroundImageFile);
-          //Uri backgroundAssetUri = Uri.parse(backgroundImageUrl);
+          
+          File stickerImageFile = File.createTempFile("instagramSticker", ".png", parentDir);
+          URL stickerURL = new URL(stickerAssetUrl);
+          saveImage(stickerURL, stickerImageFile);
+          Uri stickerAssetUri = FileProvider.getUriForFile(this.cordova.getActivity().getBaseContext(), this.cordova.getActivity().getBaseContext().getPackageName() + ".provider" ,stickerImageFile);
           
           // Instantiate implicit intent with ADD_TO_STORY action,
           // background asset, and attribution link
           Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
           intent.setDataAndType(backgroundAssetUri, "image/*");
           intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-          intent.putExtra("content_url", attributionLinkUrl);
+          intent.putExtra("interactive_asset_uri", stickerAssetUri);
 
           // Instantiate activity and verify it will resolve implicit intent
           Activity activity = this.cordova.getActivity();
+          activity.grantUriPermission("com.instagram.android", stickerAssetUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
           if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
             activity.startActivityForResult(intent, 0);
             callbackContext.success("shared");
