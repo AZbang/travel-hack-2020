@@ -168,7 +168,7 @@ const ErrorLog = styled.p`
 `;
 
 const Challenge = ({ history }) => {
-  const { trip, challenge: id } = useQuery();
+  const { trip, challenge: id, fromHome } = useQuery();
   const challenge = data[trip].challenges[id];
   const isCompleted = !!getSaved(trip, id);
 

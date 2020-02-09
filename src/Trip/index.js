@@ -179,15 +179,14 @@ const Trip = ({ history }) => {
 
   useEffect(() => {
     window.ymaps.ready(() => {
-      console.log(window.ymaps);
-
       var myMap = new window.ymaps.Map("map", {
         center: [trip.lat || 0, trip.lng || 0],
-        zoom: trip.zoom
+        zoom: trip.zoom,
+        controls: []
       });
 
       trip.challenges.forEach(({ icon, lat = 0, lng = 0 }, challange) => {
-        const myPlacemarkWithContent = new window.ymaps.Placemark(
+        const mark = new window.ymaps.Placemark(
           [lat, lng],
           {},
           {
@@ -197,7 +196,11 @@ const Trip = ({ history }) => {
             iconImageOffset: [-32, -32]
           }
         );
-        myMap.geoObjects.add(myPlacemarkWithContent);
+        mark.events.add("click", () => {
+          history.push(`/challenge?trip=${id}&challenge=${challange}`);
+        });
+
+        myMap.geoObjects.add(mark);
       });
     });
   }, []);
@@ -218,28 +221,6 @@ const Trip = ({ history }) => {
         </CompleteCard>
       )}
       <div id="map" style={{ width: "100vw", height: "70vh" }}></div>
-      {/* <LeafletMap center={} zoom={trip.zoom}>
-        <TileLayer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        {trip.challenges.map(({ icon, lat = 0, lng = 0 }, challange) => {
-          const Icon = new L.Icon({
-            iconUrl: icon,
-            iconRetinaUrl: icon,
-            iconAnchor: [32, 32],
-            iconSize: [64, 64]
-          });
-
-          return (
-            <Marker
-              onClick={() =>
-                history.push(`/challenge?trip=${id}&challenge=${challange}`)
-              }
-              icon={Icon}
-              key={challange}
-              position={[lat, lng]}
-            />
-          );
-        })}
-      </LeafletMap> */}
       <Card>
         <CardTitle>Челленджи</CardTitle>
         {trip.challenges.map(({ icon, name, description }, challange) => (

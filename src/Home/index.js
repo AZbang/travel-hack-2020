@@ -151,23 +151,17 @@ const Home = ({ history }) => {
       <TravelList>
         {data.map(({ name, challenges }, id) => (
           <TravelCard key={id}>
-            <ChellengesList>
-              {challenges.map(({ icon }, challenge) => (
-                <ChellengeIcon
-                  key={challenge}
-                  complete={!!getSaved(id, challenge)}
-                  onClick={() => {
-                    history.push(`/trip?id=${id}`);
-                    history.push(
-                      `/challenge?trip=${id}&challenge=${challenge}`
-                    );
-                  }}
-                >
-                  <img src={icon} />
-                </ChellengeIcon>
-              ))}
-            </ChellengesList>
             <Link to={`/trip?id=${id}`}>
+              <ChellengesList>
+                {challenges.map(({ icon }, challenge) => (
+                  <ChellengeIcon
+                    key={challenge}
+                    complete={!!getSaved(id, challenge)}
+                  >
+                    <img src={icon} />
+                  </ChellengeIcon>
+                ))}
+              </ChellengesList>
               <TravelCardTitle>{name}</TravelCardTitle>
               <ProgressLine progress={getProgress(id)} />
               <TravelCardBonus>
