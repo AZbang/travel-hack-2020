@@ -111,8 +111,6 @@ const CompleteCard = styled.div`
   text-align: center;
   padding: 80px 0 50px;
 
-  animation: ${({ show }) => (show ? bounceIn : bounceOut)} 0.75s;
-
   h1 {
     font-size: 36px;
     font-weight: bold;
@@ -151,31 +149,31 @@ const CustomMarker = ({ icon, position }) => {
 };
 
 const Trip = ({ history }) => {
-  const { id, complete } = useQuery();
-  const [isShowComplete, setShowComplete] = useState(!!complete);
-  const trip = data[id];
+  const { id } = useQuery();
+  const [showComplete, setShowComplete] = useState(window.completeChallenge);
+  const trip = data[id] || {};
 
   useEffect(() => {
-    if (!complete) return;
+    if (!window.completeChallenge) return;
     let timer = null;
-    document.addEventListener(
-      "resume",
-      () => {
-        document.body.style.overflow = "hidden";
-        timer = setTimeout(() => {
-          document.body.style.overflow = "";
-          setShowComplete(false);
-        }, 3000);
-      },
-      false
-    );
+    const animateController = () => {
+      window.completeChallenge = null;
+      const card = document.getElementById("complete");
+      card.style.display = "block";
+      card.classList.add("animated", "bounceIn");
+      timer = setTimeout(() => {
+        document.body.style.overflow = "";
+        card.classList.remove("bounceIn");
+        card.classList.add("bounceOut");
+        card.addEventListener("animationend", () => {
+          card.style.display = "none";
+        });
+      }, 2000);
+    };
 
+    document.addEventListener("resume", animateController, false);
     return () => clearTimeout(timer);
   }, []);
-
-  const hideComplete = e => {
-    if (!isShowComplete) e.target.style.display = "none";
-  };
 
   useEffect(() => {
     window.ymaps.ready(() => {
@@ -210,30 +208,34 @@ const Trip = ({ history }) => {
       <Header fixed={true}>
         <HeaderTitle>{trip.name}</HeaderTitle>
       </Header>
-      {trip.challenges[complete] && (
-        <CompleteCard onAnimationEnd={hideComplete} show={isShowComplete}>
-          <img src="check.svg" />
-          <h1>Отлично!</h1>
-          <p>
-            <span>{trip.challenges[complete].bonus} ₽</span> за{" "}
-            {trip.challenges[complete].name} зачислены на ваш счет.
-          </p>
-        </CompleteCard>
-      )}
+      <CompleteCard
+        id="complete"
+        style={{ display: "none" }}
+        show={!!showComplete}
+      >
+        <img src="check.svg" />
+        <h1>Отлично!</h1>
+        <p>
+          <span>{showComplete && trip.challenges[showComplete].bonus} ₽</span>{" "}
+          за {showComplete && trip.challenges[showComplete].name} зачислены на
+          ваш счет.
+        </p>
+      </CompleteCard>
       <div id="map" style={{ width: "100vw", height: "70vh" }}></div>
       <Card>
         <CardTitle>Челленджи</CardTitle>
-        {trip.challenges.map(({ icon, name, description }, challange) => (
-          <Challenge key={challange}>
-            <ChallengeIcon complete={!!getSaved(id, challange)}>
-              <img src={icon} alt={name} />
-            </ChallengeIcon>
-            <ChallengeContent>
-              <h1>{name}</h1>
-              <p>{description}</p>
-            </ChallengeContent>
-          </Challenge>
-        ))}
+        {trip.challenges &&
+          trip.challenges.map(({ icon, name, description }, challange) => (
+            <Challenge key={challange}>
+              <ChallengeIcon complete={!!getSaved(id, challange)}>
+                <img src={icon} alt={name} />
+              </ChallengeIcon>
+              <ChallengeContent>
+                <h1>{name}</h1>
+                <p>{description}</p>
+              </ChallengeContent>
+            </Challenge>
+          ))}
       </Card>
     </>
   );

@@ -31,4 +31,5 @@ export const currentBonus = trip =>
     return acc;
   }, 0);
 
-export const getSaved = (trip, challenge) => profile.trips[trip][challenge];
+export const getSaved = (trip, challenge) =>
+  trip && profile.trips[trip][challenge];

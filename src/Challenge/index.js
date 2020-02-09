@@ -169,7 +169,7 @@ const ErrorLog = styled.p`
 
 const Challenge = ({ history }) => {
   const { trip, challenge: id, fromHome } = useQuery();
-  const challenge = data[trip].challenges[id];
+  const challenge = (data[trip] && data[trip].challenges[id]) || {};
   const isCompleted = !!getSaved(trip, id);
 
   const [status, setStatus] = useState(false);
@@ -227,10 +227,12 @@ const Challenge = ({ history }) => {
       const body = JSON.parse(await response.text());
       const isVerify =
         body.is_selfie &&
-        body.landmarks.some(v => v.toLowerCase() === challenge.trigger);
+        body.landmarks.some(
+          v => v.toLowerCase() === challenge.trigger.toLowerCase()
+        );
       setVerify(isVerify);
       if (isVerify) setShareImage("http://85.143.218.224/img/" + body.filename);
-      else setLog("К сожалению Ваше фото не подходит для этого челенджа.");
+      else setLog("Упс, кажется Ваше фото не подходит для этого челенджа");
     } catch (e) {
       console.log(e);
       setLog(e.toString());
@@ -270,6 +272,7 @@ const Challenge = ({ history }) => {
       setStatus(true);
       await shareStory(shareImage);
       completeChallenge(trip, id, shareImage, challenge.bonus);
+      window.completeChallenge = id;
       history.goBack();
     } catch (e) {
       setLog("Ошибка, невозможно опубликовать сторис!");

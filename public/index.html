@@ -12,6 +12,10 @@
       src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=80ea98cf-f2cc-47d6-9fe3-47fc8f9bf7c0"
       type="text/javascript"
     ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
     <title>Megatravel</title>
     <style>
       body {
@@ -21,6 +25,14 @@
         font-family: "Graphik";
         width: 100vw;
         overflow-x: hidden;
+      }
+
+      .route-wrapper {
+        position: relative;
+      }
+
+      .route-wrapper > div {
+        position: absolute;
       }
     </style>
   </head>
